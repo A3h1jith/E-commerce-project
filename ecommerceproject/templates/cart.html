@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!--metadescription-->
+{% block metadescription %}
+      Your Cart<br>Proceed to review your items and place the order
+{% endblock %}
+
+<!--title content-->
+{% block title %}
+    Cart - A3H1 FASHION SPOT
+{% endblock %}
+
+<!--Block content-->
+{% block content %}
+    {% if not cart_items %}
+        <div>
+            <div>
+                <h1 class="text-center my_title">Your shopping Cart is empty</h1>
+                <br>
+                <p class="text-center">
+                    <a href="{% url 'ecommerceapp:allProdCat' %}">Click here</a>to continue shopping
+                </p>
+            </div>
+        </div>
+    {% else %}
+        <div>
+            <div class="text-center">
+                <br>
+                <h1 class="text-center my_title">Your Shopping Cart</h1>
+
+            </div>
+            <div class="row mx-auto">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-6 text-center">
+                    <table class="table my_custom_table">
+                        <thead class="my_custom_thead">
+                            <tr>
+                                <th colspan="5">
+                                    Your Items
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for cart_item in cart_items %}
+                        <tr>
+                            <td>
+                                <a href="{{ cart_item.product.get_absolute_url }}"><img src="{{ cart_item.product.image.url }}" alt="productincart" class="float-left rounded custom_image" style="height:200px;width:200px;"></a>
+                            </td>
+                            <td class="text-left">
+                                {{ cart_item.product.name }}
+                                <br><br>
+                                SKU: {{ cart_item.product.id }}
+                                <br><br>
+                                Price: <strong>₹{{ cart_item.product.price }}</strong>
+                                <br><br>
+                                Qty: <strong>{{ cart_item.quantity }}</strong> x ₹ <strong>{{ cart_item.product.price }}</strong>  {{ cart_item }}
+                            </td>
+                             <td>
+
+                            </td>
+                            {% if cart_item.quantity < cart_item.product.stock %}
+                            <td style="vertical-align:top">
+                                <br>
+                                <a href="{% url 'cart:add_cart' cart_item.product.id %}" class="custom_a"><i class="fa fa-plus-circle" style="color:black;"></i></a><br>
+                                <a href="{% url 'cart:full_remove' cart_item.product.id %}" class="custom_a"><i class="fa fa-trash" style="color:red;"></i></a><br>
+                                <a href="{% url 'cart:cart_remove' cart_item.product.id %}" class="custom_a"><i class="fa fa-minus-circle" style="color:black;"></i></a>
+                                <br><br><br><p style="vertical-align:bottom;">TOTAL<br>
+                                <strong>₹{{ cart_item.subtotal }}</strong></p>
+                            </td>
+                            {% else %}
+                            <td>
+                                <br>
+                                <a href="{% url 'cart:cart_remove' cart_item.product.id %}" class="custom_a"><i class="fa fa-minus-circle" style="color:black;"></i></a><br>
+                                <a href="{% url 'cart:full_remove' cart_item.product.id %}" class="custom_a"><i class="fa fa-trash" style="color:red;"></i></a>
+                                <br><br><br><p style="vertical-align:bottom;">TOTAL<br>
+                                <strong>₹{{ cart_item.subtotal }}</strong></p>
+                            </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-6 text-center">
+                    <table class="table my_custom_table">
+                        <thead class="my_custom_thead">
+                        <tr>
+                            <th colspan="5">
+                                Checkout
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                Please review Your Shopping Cart items before proceeding with the order payment
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-size:16px;">
+                                GRAND TOTAL = <strong>₹{{ total }}</strong>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="mx-auto">
+                        <a href="{% url 'ecommerceapp:allProdCat' %}" class="btn btn-secondary btn-block my_custom_button">Continue Shopping</a>
+                    </div>
+                    <br><br>
+                    <table class="table my_custom_table">
+                        <thead class="my_custom_thead">
+                        <tr>
+                            <th colspan="5">
+                                Payment
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                Confirm your Orders and Continue with Payment
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="mx-auto">
+                        <a href="{% url 'ecommerceapp:allProdCat' %}" class="btn btn-outline-success btn-block my_custom_button">Make Payment</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
